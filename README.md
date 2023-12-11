@@ -1,80 +1,62 @@
+# Medical Data Visualizer
 
-# Medical Examination Data Analysis
+This project involves the analysis of medical examination data to derive meaningful insights. The dataset contains information on various health-related factors for a sample of individuals. The primary objectives include visualizing categorical variables and exploring correlations between different health parameters.
 
-## Overview
+## Dataset
+The dataset (`medical_examination.csv`) consists of 70,000 rows and 13 columns. 
+Each row represents an individual, and the columns include information such as age, sex, height, weight, blood pressure, cholesterol, glucose levels, and lifestyle factors.
 
-This project analyzes medical examination data using Python with Pandas, Seaborn, and Matplotlib. The dataset includes information such as age, gender, cholesterol levels, blood pressure, and lifestyle factors for 70,000 patients.
+## Technologies Used
 
-- **Categorical Variable Analysis**
+- Python
+- Pandas
+- Seaborn
+- Matplotlib
+- NumPy
+
+## Data Cleaning and Transformation
+
+The initial exploration and preparation of the data involved:
+
+- Checking data types and dimensions
+- Creating a new 'overweight' column based on Body Mass Index (BMI)
+- Transforming cholesterol and glucose columns into binary variables
+
+## Visualization
+
+### Categorical Variables
+
+A categorical plot was created to visualize the distribution of patients based on various categorical variables, including cholesterol levels, glucose levels, smoking habits, alcohol consumption, physical activity, and overweight status.
+
 <p align="center">
   <img width="354" alt="image" src="https://github.com/Tikii0617/Medical-Data-Visualizer/blob/master/cardio.png"> 
 </p>
 
-- **Correlation Heatmap**
+### Correlation Heatmap
 
-  <p align="center">
+A heatmap was generated to explore correlations between different health parameters. Only data within valid ranges for blood pressure, height, and weight were considered to ensure meaningful correlations.
+
+<p align="center">
   <img width="354" alt="image" src="https://github.com/Tikii0617/Medical-Data-Visualizer/blob/master/heatmap.png">
   </p>
 
-## Project Structure
+## Conclusion
+- ### Health Indicators:
+   There is a correlation between cardiovascular disease (cardio) and health indicators such as glucose (gluc) and cholesterol (chole). This suggests that individuals with higher glucose and cholesterol levels may be more prone to cardiovascular issues.
 
-- `medical_examination.csv`: The dataset used for analysis.
-- `analysis_script.py`: Python script for data analysis.
+- ### Lifestyle Factors:
+   Smoking behavior shows a correlation with both gender and cardiovascular disease. This implies that there might be gender-related differences in smoking habits, and smokers may have a higher likelihood of cardiovascular problems.
 
-## Data Cleaning and Feature Engineering
+- ### Weight and Height:
+   The correlation between weight and height indicates that taller individuals tend to weigh more on average. This is a common and expected observation.
 
-# Load the dataset
-import pandas as pd
-```python
-df = pd.read_csv('/Users/dejicuomu/Desktop/medical_examination.csv')
-```
-# Data cleaning and feature engineering
-```python
-df['overweight'] = (df['weight'] / (df['height'] / 100) ** 2 > 25).astype(int)
-df['cholesterol'] = (df['cholesterol'] > 1).astype(int)
-df['gluc'] = (df['gluc'] > 1).astype(int)
-```
+- ### Blood Pressure and Cardiovascular Disease:
+   The correlation between cardiovascular disease and diastolic blood pressure (ap_lo) suggests that individuals with specific diastolic blood pressure levels may be more susceptible to cardiovascular conditions.
 
-## Categorical Variable Analysis
+- ### Age and Cardiovascular Disease:
+  There is a correlation between age and cardiovascular disease, aligning with the common understanding that the risk of cardiovascular issues increases with age.
 
-```python
-# Categorical variable analysis
-def draw_cat_plot():
-    df_cat = pd.melt(df, id_vars=['cardio'], value_vars=['cholesterol', 'gluc', 'smoke', 'alco', 'active', 'overweight'])
-    df_cat['total'] = 1
-    df_cat = df_cat.groupby(['cardio', 'variable', 'value'], as_index=False).count()
-    df_cat.rename(columns={'total': 'total_patients'}, inplace=True)
-    g = sns.catplot(x='variable', y='total_patients', hue='value', col='cardio', data=df_cat, kind='bar', ci=None, height=5, aspect=0.8)
-    g.set_axis_labels('Variables', 'Total Patients')
-    g.set_xticklabels(rotation=45)
-    g.set_titles("{col_name} {col_var}")
-    g.legend.set_title('Value')
-    fig = g.fig
-
-draw_cat_plot()
-```
-
-## Correlation Heatmap
-
-```python
-# Correlation heatmap
-def draw_heat_map():
-    df_heat = df[(df['ap_lo'] <= df['ap_hi']) &
-                 (df['height'] >= df['height'].quantile(0.025)) &
-                 (df['height'] <= df['height'].quantile(0.975)) &
-                 (df['weight'] >= df['weight'].quantile(0.025)) &
-                 (df['weight'] <= df['weight'].quantile(0.975))]
-    corr = df_heat.corr()
-    mask = np.triu(np.ones_like(corr, dtype=bool))
-    fig, ax = plt.subplots(figsize=(10, 8))
-    sns.heatmap(corr, mask=mask, cmap='coolwarm', vmax=.3, center=0, square=True, linewidths=.5, cbar_kws={"shrink": 0.5})
-    
-
-draw_heat_map()
-```
-
-## Results
-
-- The analysis reveals insights into the distribution of lifestyle factors among patients and their correlation.
+- ### Alcohol and Smoking:
+   The correlation between alcohol consumption (alco) and smoking behavior implies a potential connection between these lifestyle choices. The provided Python script and visualizations offer a starting point for further analysis and exploration in the realm of health data.
 
 
