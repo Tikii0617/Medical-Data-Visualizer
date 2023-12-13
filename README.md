@@ -77,4 +77,3 @@ draw_heat_map()
 
 - The analysis reveals insights into the distribution of lifestyle factors among patients and their correlation.
 
-
